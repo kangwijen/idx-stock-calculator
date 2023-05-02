@@ -12,7 +12,7 @@ double get_price(double init_price, double max_gain) {
             return -1;
         } else if (price == 50){
         	return 50;
-		} else if (price <= 200) {
+	} else if (price <= 200) {
             return floor(price);
         } else if (price <= 500) {
             return floor(price / 2) * 2.0;
@@ -28,7 +28,7 @@ double get_price(double init_price, double max_gain) {
             return -1;
         } else if (price == 50){
         	return 50;
-		} else if (price <= 200) {
+	} else if (price <= 200) {
             return ceil(price);
         } else if (price <= 500) {
             return ceil(price / 2) * 2.0;
