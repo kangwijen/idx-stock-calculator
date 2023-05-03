@@ -2,144 +2,34 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include <locale.h>
+#include "price.h"
+#include "gain.h"
 
 //IDX Stock Calculator v1.2
 //Made by kangwijen / @thatryzenguy
 
-double get_price(double init_price, double max_gain, int board) {
-    double price = init_price * (1 + max_gain);
-    if (max_gain >= 0 && board != 3) {
-        if (price < 50) {
-            return;
-        } else if (price == 50){
-        	return 50;
-		} else if (price <= 200) {
-            return floor(price);
-        } else if (price <= 500) {
-            return floor(price / 2) * 2.0;
-        } else if (price <= 2000) {
-            return floor(price / 5) * 5.0;
-        } else if (price <= 5000) {
-            return floor(price / 10) * 10.0;
-        } else {
-            return floor(price / 25) * 25.0;
-        }
-    } else if (max_gain < 0 && board != 3) {
-        if (price < 50) {
-            return;
-        } else if (price == 50){
-        	return 50;
-		} else if (price <= 200) {
-            return ceil(price);
-        } else if (price <= 500) {
-            return ceil(price / 2) * 2.0;
-        } else if (price <= 2000) {
-            return ceil(price / 5) * 5.0;
-        } else if (price <= 5000) {
-            return ceil(price / 10) * 10.0;
-        } else {
-            return ceil(price / 25) * 25.0;
-        }
-    } else if (max_gain >= 0 && board == 3) {
-        if (price < 1) {
-            return;
-        } else if (price == 1){
-        	return 1;
-		} else if (price <= 200) {
-            return floor(price);
-        } else if (price <= 500) {
-            return floor(price / 2) * 2.0;
-        } else if (price <= 2000) {
-            return floor(price / 5) * 5.0;
-        } else if (price <= 5000) {
-            return floor(price / 10) * 10.0;
-        } else {
-            return floor(price / 25) * 25.0;
-        }
-    } else if (max_gain < 0 && board == 3) {
-//    	puts("Called Function get_price, else if (max_gain < 0 && board == 3)\n");
-        if (price < 1) {
-//        	puts("Called Function get_price, price < 1\n");
-            return;
-        } else if (price == 1){
-//        	puts("Called Function get_price, price == 1\n");
-        	return 1;
-		} else if (price <= 200) {
-//			puts("Called Function get_price, price <= 200\n");
-            return ceil(price);
-        } else if (price <= 500) {
-//        	puts("Called Function get_price, price <= 500\n");
-            return ceil(price / 2) * 2.0;
-        } else if (price <= 2000) {
-//        	puts("Called Function get_price, price <= 2000\n");
-            return ceil(price / 5) * 5.0;
-        } else if (price <= 5000) {
-//        	puts("Called Function get_price, price <= 5000\n");
-            return ceil(price / 10) * 10.0;
-        } else {
-//        	puts("Called Function get_price, price > 5000\n");
-            return ceil(price / 25) * 25.0;
-        }
-    }
-}
-
-double get_max_gain(double price, char* input, int board) {
-    if (price <= 50 && board != 3) {
-        return 0.0;
-    } else if (strcmp(input, "ARA") == 0 || strcmp(input, "ara") == 0) {
-    	if (board == 0 || board == 1 || board == 2){
-	        if (price >= 50 && price <= 200) {
-	            return 0.35;
-	        } else if (price <= 5000) {
-	            return 0.25;
-	        } else {
-	            return 0.20;
-	    	}
-		} else if (board == 3){
-			return 0.1;
-		} else {
-			return -3;
-		}
-    } else if (strcmp(input, "ARB") == 0 || strcmp(input, "arb") == 0){
-    	if (board == 0){
-			return -0.07;
-		} else if (board == 1){
-			return -0.15;
-		} else if (board == 2){
-	        if (price >= 50 && price <= 200) {
-	            return -0.35;
-	        } else if (price <= 5000) {
-	            return -0.25;
-	        } else {
-	            return -0.20;
-	    	}			
-		} else if (board == 3){
-//			puts("Called function get_max_gain, else if (board == 3)\n");
-			return -0.1;
-		} else {
-			return -3;
-		}        
-    } else {
-    	return -3;
-	}
-}
-
 int main() {
+	char intro1[100] = "  _____ _______   __   _____ _             _       _____      _            _       _             \n";
+	char intro2[100] = " |_   _|  __ \\ \\ / /  / ____| |           | |     / ____|    | |          | |     | |            \n";
+	char intro3[100] = "   | | | |  | \\ V /  | (___ | |_ ___   ___| | __ | |     __ _| | ___ _   _| | __ _| |_ ___  _ __ \n";
+	char intro4[100] = "   | | | |  | |> <    \\___ \\| __/ _ \\ / __| |/ / | |    / _` | |/ __| | | | |/ _` | __/ _ \\| '__|\n";
+	char intro5[100] = "  _| |_| |__| / . \\   ____) | || (_) | (__|   <  | |___| (_| | | (__| |_| | | (_| | || (_) | |   \n";
+	char intro6[100] = " |_____|_____/_/ \\_\\ |_____/ \\__\\___/ \\___|_|\\_\\  \\_____\\__,_|_|\\___|\\__,_|_|\\__,_|\\__\\___/|_|   \n";
 	int choice;
-	char choice1[5], choice3[5];
+	char choice1[5], choice2[5], choice3[5];
     FILE *settings = fopen("settings.txt", "a");
 	
     do {
     	system("cls");
-        printf("IDX Stock Calculator!\n");
-        printf("by kangwijen || @thatryzenguy\n");
-        printf("=============================\n");
-        printf("1. ARA/ARB Calculator\n");
-        printf("3. Preferences [In Development]\n");
-        printf("4. Quit\n");
-        printf("=============================\n");
-        printf("Choose: ");
+        printf("%s%s%s%s%s%s", intro1, intro2, intro3, intro4, intro5, intro6);
+        printf("				by kangwijen || @thatryzenguy\n");
+        printf(" ====================================================\n");
+        printf(" | 1. ARA/ARB Calculator 	[New Feature]	   |\n");
+        printf(" | 2. Warrant BEP Calculator 	[Beta]		   |\n");
+        printf(" | 3. Preferences 		[In Development]   |\n");
+        printf(" | 4. Quit					   |\n");
+        printf(" ====================================================\n");
+        printf(" Choose: ");
         scanf("%d", &choice);
         switch(choice) {
             case 1:
@@ -182,11 +72,40 @@ int main() {
 				    
 				} while(strcmp(choice1, "N") != 0);
                 break;
+            case 2:
+				do {
+				    system("cls");
+				    printf("Warrant BEP Calculator\n");
+				    float lot_induk = 10000.00, multiplier, harga_induk, saham, waran;
+				    printf("Enter stock price: ");
+				    scanf("%f", &harga_induk);
+				    printf("Enter warrant ratio (stock:warrant): ");
+				    scanf("%f:%f", &saham, &waran);
+				    
+				    multiplier = waran/saham;
+				    float loss = harga_induk - (harga_induk*0.07);
+				    float lot_waran = multiplier * lot_induk;
+				    float result, price;
+				    float base_induk = lot_induk * harga_induk * 100.00;
+				    float base_loss = lot_induk * 100 * loss;
+				    result = (base_loss + (price * lot_waran * 100.00)) / base_induk - 1;
+				    int i;
+				    for (i = 0; result <= 0.00; i++) {
+//				        printf("result %i %f%%\n", i, result*100.00);
+				        price++;
+				        result = (base_loss + (price * lot_waran * 100.00)) / base_induk - 1;
+				    }
+				    printf("Sell warrant at %.0f | Gain %.2f%%\n", price, result*100.00);
+				
+				    printf("Calculate again? (Y/N): ");
+				    scanf("%s", choice2);
+				} while (strcmp(choice2, "N") != 0);
+				break;
             case 3:
             	do{
-            		printf("Save settings? (Y/N): ");
+            		printf("Exit? (Y/N): ");
 					scanf("%s", choice3);   	
-				} while(strcmp(choice3, "Y") != 0);
+				} while(strcmp(choice3, "N") != 0);
 				fclose(settings);
 				break;    
             case 4:
